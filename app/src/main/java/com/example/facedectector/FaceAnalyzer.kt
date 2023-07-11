@@ -10,6 +10,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.facedectector.databinding.ActivityFaceDetectorBinding
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 
@@ -29,7 +30,10 @@ class FaceAnalyzer : ImageAnalysis.Analyzer {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             detector.process(image)
                 .addOnSuccessListener { faces ->
-                    binding?.faceBoxOverlay?.setFaces(faces)
+                    binding?.faceBoxOverlay?.setFaces(
+                        faces,
+                        imageProxy.image!!.width.toFloat(),
+                        imageProxy.image!!.height.toFloat())
                 }
                 .addOnFailureListener { e ->
                     // Xử lý khi có lỗi xảy ra trong quá trình nhận diện khuôn mặt

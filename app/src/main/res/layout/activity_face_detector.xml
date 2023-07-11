@@ -9,15 +9,15 @@
 
 
     <androidx.camera.view.PreviewView
+        android:id="@+id/camPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:id="@+id/camPreview"/>
+        android:layout_centerInParent="true" />
 
     <com.example.facedectector.FaceBoxOverlay
+        android:id="@+id/faceBoxOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:id="@+id/faceBoxOverlay"/>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
