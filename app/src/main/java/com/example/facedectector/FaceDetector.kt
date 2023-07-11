@@ -108,4 +108,8 @@ class FaceDetector : AppCompatActivity() {
             }
         }
     }
+
+    companion object {
+        var isBackCam = true
+    }
 }

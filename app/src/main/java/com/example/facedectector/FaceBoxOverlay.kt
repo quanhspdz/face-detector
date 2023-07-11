@@ -29,10 +29,12 @@ class FaceBoxOverlay @JvmOverloads constructor(
     private val faceRects = mutableListOf<Rect>()
     private var imageRectWidth: Float = 0f
     private var imageRectHeight: Float = 0f
+    private var isBackCam: Boolean = true
 
-    fun setFaces(faces: List<Face>, imageRectWidth: Float, imageRectHeight: Float) {
+    fun setFaces(faces: List<Face>, imageRectWidth: Float, imageRectHeight: Float, isBackCam: Boolean) {
         this.imageRectWidth = imageRectWidth
         this.imageRectHeight = imageRectHeight
+        this.isBackCam = isBackCam
 
         faceRects.clear()
         for (face in faces) {
@@ -41,7 +43,7 @@ class FaceBoxOverlay @JvmOverloads constructor(
         invalidate()
     }
 
-    private fun getBoxRect(imageRectWidth: Float, imageRectHeight: Float, faceBoundingBox: Rect): RectF {
+    private fun getBoxRect(imageRectWidth: Float, imageRectHeight: Float, faceBoundingBox: Rect, isBackCam: Boolean): RectF {
         val scaleX = width.toFloat() / imageRectHeight
         val scaleY = height.toFloat() / imageRectWidth
         val scale = scaleX.coerceAtLeast(scaleY)
@@ -58,9 +60,14 @@ class FaceBoxOverlay @JvmOverloads constructor(
 
         val centerX = width.toFloat() / 2
 
-        return mappedBox.apply {
-            left = centerX + (centerX - left)
-            right = centerX - (right - centerX)
+        return if (isBackCam) {
+            mappedBox
+        } else {
+            mappedBox
+                .apply {
+                    left = centerX + (centerX - left)
+                    right = centerX - (right - centerX)
+                }
         }
     }
 
@@ -68,7 +75,7 @@ class FaceBoxOverlay @JvmOverloads constructor(
         super.onDraw(canvas)
 
         for (rect in faceRects) {
-            val mappedRect = getBoxRect(imageRectWidth, imageRectHeight, rect)
+            val mappedRect = getBoxRect(imageRectWidth, imageRectHeight, rect, isBackCam)
             canvas.drawRect(mappedRect, faceRectPaint)
         }
     }

@@ -33,7 +33,8 @@ class FaceAnalyzer : ImageAnalysis.Analyzer {
                     binding?.faceBoxOverlay?.setFaces(
                         faces,
                         imageProxy.image!!.width.toFloat(),
-                        imageProxy.image!!.height.toFloat())
+                        imageProxy.image!!.height.toFloat(),
+                        FaceDetector.isBackCam)
                 }
                 .addOnFailureListener { e ->
                     // Xử lý khi có lỗi xảy ra trong quá trình nhận diện khuôn mặt
