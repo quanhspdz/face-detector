@@ -23,6 +23,8 @@ import java.util.concurrent.Executors
 class FaceDetector : AppCompatActivity() {
     lateinit var binding: ActivityFaceDetectorBinding
     private lateinit var cameraExecutor: ExecutorService
+    private var cameraFacing = CameraSelector.DEFAULT_BACK_CAMERA
+    private var facingDefault = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,18 @@ class FaceDetector : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         requestAllPermissions()
+
+        binding.buttonSwitchCam.setOnClickListener {
+            if (isBackCam) {
+                cameraFacing = CameraSelector.DEFAULT_FRONT_CAMERA
+                isBackCam = false
+                startCamera()
+            } else {
+                cameraFacing = CameraSelector.DEFAULT_BACK_CAMERA
+                isBackCam = true
+                startCamera()
+            }
+        }
     }
 
     private fun requestAllPermissions() {
@@ -80,7 +94,7 @@ class FaceDetector : AppCompatActivity() {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this,
-                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    cameraFacing,
                     preview,
                     imageAnalyzer
                 )
