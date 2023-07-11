@@ -14,4 +14,10 @@
         android:layout_centerInParent="true"
         android:id="@+id/camPreview"/>
 
+    <com.example.facedectector.FaceBoxOverlay
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:id="@+id/faceBoxOverlay"/>
+
 </RelativeLayout>

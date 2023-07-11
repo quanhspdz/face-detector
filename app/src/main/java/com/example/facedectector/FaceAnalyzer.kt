@@ -8,12 +8,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.facedectector.databinding.ActivityFaceDetectorBinding
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 
 class FaceAnalyzer : ImageAnalysis.Analyzer {
     var context: Context? = null
+    var binding: ActivityFaceDetectorBinding? = null
     private val TAG = "com.example.facedectector.FaceAnalyzer"
     private val options = FaceDetectorOptions.Builder()
         .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
@@ -27,13 +29,7 @@ class FaceAnalyzer : ImageAnalysis.Analyzer {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             detector.process(image)
                 .addOnSuccessListener { faces ->
-                    for (face in faces) {
-                        val bounds = face.boundingBox
-                        // Đoạn code này sẽ được gọi khi có khuôn mặt được nhận diện
-                        // Bạn có thể xử lý khuôn mặt ở đây
-                        Log.d(TAG, "Khuôn mặt được nhận diện tại vị trí: $bounds")
-                        Toast.makeText(context, "Khuôn mặt được nhận diện tại vị trí: $bounds", Toast.LENGTH_SHORT).show()
-                    }
+                    binding?.faceBoxOverlay?.setFaces(faces)
                 }
                 .addOnFailureListener { e ->
                     // Xử lý khi có lỗi xảy ra trong quá trình nhận diện khuôn mặt

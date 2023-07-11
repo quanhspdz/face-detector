@@ -19,6 +19,7 @@ import com.example.facedectector.databinding.ActivityFaceDetectorBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@Suppress("DEPRECATION")
 class FaceDetector : AppCompatActivity() {
     lateinit var binding: ActivityFaceDetectorBinding
     private lateinit var cameraExecutor: ExecutorService
@@ -66,9 +67,9 @@ class FaceDetector : AppCompatActivity() {
 
             val faceAnalyzer = FaceAnalyzer()
             faceAnalyzer.context = this@FaceDetector
+            faceAnalyzer.binding = binding
 
             val imageAnalyzer = ImageAnalysis.Builder()
-                .setTargetResolution(Size(640, 480))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also {
