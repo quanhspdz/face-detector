@@ -32,7 +32,7 @@ class FaceBoxOverlay @JvmOverloads constructor(
 
     private val faceFeaturePaint = Paint().apply {
         color = Color.GREEN
-        style = Paint.Style.FILL
+        style = Paint.Style.STROKE
         strokeWidth = 5f
     }
 
