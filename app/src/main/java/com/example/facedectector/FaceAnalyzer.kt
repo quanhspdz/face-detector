@@ -20,6 +20,7 @@ class FaceAnalyzer : ImageAnalysis.Analyzer {
     private val TAG = "com.example.facedectector.FaceAnalyzer"
     private val options = FaceDetectorOptions.Builder()
         .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
         .build()
     private val detector = FaceDetection.getClient(options)
 
