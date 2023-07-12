@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -26,6 +27,7 @@ class FaceDetector : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private var cameraFacing = CameraSelector.DEFAULT_BACK_CAMERA
     private var facingDefault = true
+    private var isVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,18 @@ class FaceDetector : AppCompatActivity() {
                 cameraFacing = CameraSelector.DEFAULT_BACK_CAMERA
                 isBackCam = true
                 startCamera()
+            }
+        }
+
+        binding.buttonSwitchVisible.setOnClickListener {
+            if (isVisible) {
+                isVisible = false
+                binding.buttonSwitchVisible.setImageResource(R.drawable.ic_visible)
+                binding.camPreview.visibility = View.INVISIBLE
+            } else {
+                isVisible = true
+                binding.buttonSwitchVisible.setImageResource(R.drawable.ic_invisible)
+                binding.camPreview.visibility = View.VISIBLE
             }
         }
     }
