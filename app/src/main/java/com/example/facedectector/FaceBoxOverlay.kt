@@ -31,7 +31,7 @@ class FaceBoxOverlay @JvmOverloads constructor(
     }
 
     private val faceFeaturePaint = Paint().apply {
-        color = Color.YELLOW
+        color = Color.GREEN
         style = Paint.Style.FILL
         strokeWidth = 5f
     }
@@ -95,49 +95,61 @@ class FaceBoxOverlay @JvmOverloads constructor(
     }
 
     private fun drawFaceFeatures(canvas: Canvas, face: Face) {
-        val leftEyeContour = face.getContour(FaceContour.LEFT_EYE)?.points
-        val rightEyeContour = face.getContour(FaceContour.RIGHT_EYE)?.points
-        val upperLipBottomContour = face.getContour(FaceContour.UPPER_LIP_BOTTOM)?.points
-        val leftCheekContour = face.getContour(FaceContour.LEFT_CHEEK)?.points
-        val rightCheekContour = face.getContour(FaceContour.RIGHT_CHEEK)?.points
-        val noseBridgeContour = face.getContour(FaceContour.NOSE_BRIDGE)?.points
-        val noseBottomContour = face.getContour(FaceContour.NOSE_BOTTOM)?.points
-        val faceContours = listOf(
-            leftEyeContour,
-            rightEyeContour,
-            upperLipBottomContour,
-            leftCheekContour,
-            rightCheekContour,
-            noseBridgeContour,
-            noseBottomContour
+        val faceContours = mutableListOf<List<PointF>>()
+
+        val contourTypes = listOf(
+            FaceContour.FACE,
+            FaceContour.LEFT_EYEBROW_TOP,
+            FaceContour.LEFT_EYEBROW_BOTTOM,
+            FaceContour.RIGHT_EYEBROW_TOP,
+            FaceContour.RIGHT_EYEBROW_BOTTOM,
+            FaceContour.LEFT_EYE,
+            FaceContour.RIGHT_EYE,
+            FaceContour.UPPER_LIP_TOP,
+            FaceContour.UPPER_LIP_BOTTOM,
+            FaceContour.LOWER_LIP_TOP,
+            FaceContour.LOWER_LIP_BOTTOM,
+            FaceContour.NOSE_BRIDGE,
+            FaceContour.NOSE_BOTTOM
         )
+
+        for (contourType in contourTypes) {
+            val contour = face.getContour(contourType)
+            val points = contour?.points
+            if (points != null) {
+                faceContours.add(points)
+            }
+        }
 
         faceFeaturePaint.color = ColorUtils.setAlphaComponent(faceFeaturePaint.color, 128)
 
         for (contourPoints in faceContours) {
-            if (contourPoints != null) {
-                val path = Path()
-                for (i in contourPoints.indices) {
-                    val point = contourPoints[i]
-                    val mappedPoint = PointF(
-                        getMappedX(point.x, face.boundingBox),
-                        getMappedY(point.y, face.boundingBox)
-                    )
-                    if (i == 0) {
-                        path.moveTo(mappedPoint.x, mappedPoint.y)
-                    } else {
-                        path.lineTo(mappedPoint.x, mappedPoint.y)
-                    }
+            val path = Path()
+            for (i in contourPoints.indices) {
+                val point = contourPoints[i]
+                val mappedPoint = PointF(
+                    getMappedX(point.x, face.boundingBox),
+                    getMappedY(point.y, face.boundingBox)
+                )
+                if (i == 0) {
+                    path.moveTo(mappedPoint.x, mappedPoint.y)
+                } else {
+                    path.lineTo(mappedPoint.x, mappedPoint.y)
                 }
-                path.close()
-                canvas.drawPath(path, faceFeaturePaint)
             }
+            path.close()
+            canvas.drawPath(path, faceFeaturePaint)
         }
     }
 
     private fun getMappedX(x: Float, faceBoundingBox: Rect): Float {
         val boxRect = getBoxRect(imageRectWidth, imageRectHeight, faceBoundingBox, isBackCam)
-        return boxRect.left + (x - faceBoundingBox.left) * boxRect.width() / faceBoundingBox.width()
+        val mappedX = if (isBackCam) {
+            boxRect.left + (x - faceBoundingBox.left) * boxRect.width() / faceBoundingBox.width()
+        } else {
+            boxRect.right - (x - faceBoundingBox.left) * boxRect.width() / faceBoundingBox.width()
+        }
+        return mappedX
     }
 
     private fun getMappedY(y: Float, faceBoundingBox: Rect): Float {
