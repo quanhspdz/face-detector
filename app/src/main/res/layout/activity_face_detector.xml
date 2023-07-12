@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".FaceDetector">
 
 
@@ -12,6 +13,7 @@
         android:id="@+id/camPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         android:layout_centerInParent="true" />
 
     <com.example.facedectector.FaceBoxOverlay
@@ -27,6 +29,15 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_switch_cam"
+        android:layout_marginBottom="30dp"/>
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:id="@+id/buttonSwitchVisible"
+        android:layout_marginStart="40dp"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_invisible"
         android:layout_marginBottom="30dp"/>
 
 </RelativeLayout>
