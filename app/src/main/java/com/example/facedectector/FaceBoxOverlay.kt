@@ -149,7 +149,8 @@ class FaceBoxOverlay @JvmOverloads constructor(
         } else {
             boxRect.right - (x - faceBoundingBox.left) * boxRect.width() / faceBoundingBox.width()
         }
-        return mappedX
+        //return mappedX
+        return boxRect.right - (x - faceBoundingBox.left) * boxRect.width() / faceBoundingBox.width()
     }
 
     private fun getMappedY(y: Float, faceBoundingBox: Rect): Float {
